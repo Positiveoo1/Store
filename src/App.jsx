@@ -287,13 +287,8 @@ export default function App() {
                 </button>
               </div>
             </form>
-
             {/* Xarajat qo'shish */}
-            {/* Xarajat qo'shish */}
-            <form
-              onSubmit={addExpense}
-              className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow"
-            >
+            <form onSubmit={addExpense} className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <Receipt className="w-5 h-5" /> Xarajat qo'shish
               </h3>
@@ -324,7 +319,7 @@ export default function App() {
                 <button
                   type="submit"
                   className="bg-red-600 text-white p-3 rounded-lg flex items-center justify-center"
-                  style={{ minWidth: "48px" }}
+                  style={{ minWidth: '48px' }}
                 >
                   <Plus className="w-5 h-5" />
                 </button>
