@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Plus, Trash2, Package, Receipt, Moon, Sun, DollarSign } from "lucide-react";
 
 export default function App() {
-  // localStorage dan yuklash
   const load = (key, fallback) => {
     try {
       const item = localStorage.getItem(key);
@@ -19,9 +18,9 @@ export default function App() {
   const [darkMode, setDarkMode] = useState(() => window.matchMedia("(prefers-color-scheme: dark)").matches);
   const [activeTab, setActiveTab] = useState("add");
 
-  // Formalar
+  // Formalar — Bo'sh qoldiriladi
   const [pName, setPName] = useState("");
-  const [pQty, setPQty] = useState("");
+  const [pQty, setPQty] = useState("");        // BO'SH
   const [pCost, setPCost] = useState("");
   const [pPrice, setPPrice] = useState("");
   const [pCurrency, setPCurrency] = useState("UZS");
@@ -47,9 +46,7 @@ export default function App() {
 
   const format = (uzs) => {
     const num = Number(uzs) || 0;
-    if (showUSD) {
-      return `$${(num / exchangeRate).toFixed(2)}`;
-    }
+    if (showUSD) return `$${(num / exchangeRate).toFixed(2)}`;
     return `${Math.round(num).toLocaleString()} so'm`;
   };
 
@@ -65,17 +62,23 @@ export default function App() {
       alert("Mahsulot nomi va sotish narxini kiriting");
       return;
     }
+    const qty = Number(pQty) || 1; // Agar bo'sh bo'lsa — 1
     const newP = {
-      id: Date.now() + "",
+      id: Date.now() + Math.random(), // Unikal ID
       name: pName.trim(),
-      qty: Number(pQty) || 1,
+      qty: qty,
       buyPrice: Number(pCost) || 0,
       sellPrice: Number(pPrice) || 0,
       currency: pCurrency,
       time: new Date().toISOString(),
     };
     setProducts([newP, ...products]);
-    setPName(""); setPQty("1"); setPCost(""); setPPrice(""); setPCurrency("UZS");
+    // FORM TOZLASH — pQty BO'SH QOLADI
+    setPName("");
+    setPQty("");        // BO'SH
+    setPCost("");
+    setPPrice("");
+    setPCurrency("UZS");
   };
 
   // Xarajat qo'shish
@@ -86,14 +89,16 @@ export default function App() {
       return;
     }
     const newE = {
-      id: Date.now() + "",
+      id: Date.now() + Math.random(),
       note: eNote.trim(),
       amount: Number(eAmount) || 0,
       currency: eCurrency,
       time: new Date().toISOString(),
     };
     setExpenses([newE, ...expenses]);
-    setENote(""); setEAmount(""); setECurrency("UZS");
+    setENote("");
+    setEAmount("");
+    setECurrency("UZS");
   };
 
   const remove = (list, setList, id) => {
@@ -193,9 +198,9 @@ export default function App() {
                   type="number"
                   placeholder="Soni"
                   value={pQty}
-                  onChange={(e) => setPQty(e.target.value || "1")}
+                  onChange={(e) => setPQty(e.target.value)}   // HECH QANDAY "|| 1"
                   className="p-3 border rounded-lg"
-                  
+                  min="1"
                 />
                 <input
                   type="number"
@@ -265,7 +270,7 @@ export default function App() {
           </div>
         )}
 
-        {/* Sotuvlar sahifasi */}
+        {/* Sotuvlar */}
         {activeTab === "sales" && (
           <div className="space-y-3">
             {products.length === 0 ? (
@@ -292,7 +297,7 @@ export default function App() {
           </div>
         )}
 
-        {/* Xarajatlar sahifasi */}
+        {/* Xarajatlar */}
         {activeTab === "expenses" && (
           <div className="space-y-3">
             {expenses.length === 0 ? (
@@ -329,24 +334,15 @@ export default function App() {
       {/* Pastki navigatsiya */}
       <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t">
         <div className="flex justify-around py-2">
-          <button
-            onClick={() => setActiveTab("add")}
-            className={`p-3 ${activeTab === "add" ? "text-blue-600" : "text-gray-500"}`}
-          >
+          <button onClick={() => setActiveTab("add")} className={`p-3 ${activeTab === "add" ? "text-blue-600" : "text-gray-500"}`}>
             <Plus className="w-6 h-6" />
             <p className="text-xs">Qo'shish</p>
           </button>
-          <button
-            onClick={() => setActiveTab("sales")}
-            className={`p-3 ${activeTab === "sales" ? "text-blue-600" : "text-gray-500"}`}
-          >
+          <button onClick={() => setActiveTab("sales")} className={`p-3 ${activeTab === "sales" ? "text-blue-600" : "text-gray-500"}`}>
             <DollarSign className="w-6 h-6" />
             <p className="text-xs">Sotuv</p>
           </button>
-          <button
-            onClick={() => setActiveTab("expenses")}
-            className={`p-3 ${activeTab === "expenses" ? "text-blue-600" : "text-gray-500"}`}
-          >
+          <button onClick={() => setActiveTab("expenses")} className={`p-3 ${activeTab === "expenses" ? "text-blue-600" : "text-gray-500"}`}>
             <Receipt className="w-6 h-6" />
             <p className="text-xs">Xarajat</p>
           </button>
