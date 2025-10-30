@@ -21,7 +21,7 @@ export default function App() {
 
   // Formalar
   const [pName, setPName] = useState("");
-  const [pQty, setPQty] = useState("1");
+  const [pQty, setPQty] = useState("");
   const [pCost, setPCost] = useState("");
   const [pPrice, setPPrice] = useState("");
   const [pCurrency, setPCurrency] = useState("UZS");
