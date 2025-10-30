@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Trash2, Package, Receipt, Moon, Sun, DollarSign } from "lucide-react";
+import {
+  Plus,
+  Trash2,
+  Package,
+  Receipt,
+  Moon,
+  Sun,
+  DollarSign,
+} from "lucide-react";
 
 export default function App() {
   const load = (key, fallback) => {
@@ -15,12 +23,14 @@ export default function App() {
   const [expenses, setExpenses] = useState(load("expenses", []));
   const [exchangeRate, setExchangeRate] = useState(load("rate", 12700));
   const [showUSD, setShowUSD] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => window.matchMedia("(prefers-color-scheme: dark)").matches);
+  const [darkMode, setDarkMode] = useState(
+    () => window.matchMedia("(prefers-color-scheme: dark)").matches
+  );
   const [activeTab, setActiveTab] = useState("add");
 
   // Formalar — Bo'sh qoldiriladi
   const [pName, setPName] = useState("");
-  const [pQty, setPQty] = useState("");        // BO'SH
+  const [pQty, setPQty] = useState(""); // BO'SH
   const [pCost, setPCost] = useState("");
   const [pPrice, setPPrice] = useState("");
   const [pCurrency, setPCurrency] = useState("UZS");
@@ -30,8 +40,14 @@ export default function App() {
   const [eCurrency, setECurrency] = useState("UZS");
 
   // Saqlash
-  useEffect(() => localStorage.setItem("products", JSON.stringify(products)), [products]);
-  useEffect(() => localStorage.setItem("expenses", JSON.stringify(expenses)), [expenses]);
+  useEffect(
+    () => localStorage.setItem("products", JSON.stringify(products)),
+    [products]
+  );
+  useEffect(
+    () => localStorage.setItem("expenses", JSON.stringify(expenses)),
+    [expenses]
+  );
   useEffect(() => localStorage.setItem("rate", exchangeRate), [exchangeRate]);
 
   useEffect(() => {
@@ -51,8 +67,14 @@ export default function App() {
   };
 
   // Jami
-  const income = products.reduce((sum, p) => sum + toUZS(p.sellPrice, p.currency) * (Number(p.qty) || 1), 0);
-  const expense = expenses.reduce((sum, e) => sum + toUZS(e.amount, e.currency), 0);
+  const income = products.reduce(
+    (sum, p) => sum + toUZS(p.sellPrice, p.currency) * (Number(p.qty) || 1),
+    0
+  );
+  const expense = expenses.reduce(
+    (sum, e) => sum + toUZS(e.amount, e.currency),
+    0
+  );
   const profit = income - expense;
 
   // Mahsulot qo'shish
@@ -75,7 +97,7 @@ export default function App() {
     setProducts([newP, ...products]);
     // FORM TOZLASH — pQty BO'SH QOLADI
     setPName("");
-    setPQty("");        // BO'SH
+    setPQty(""); // BO'SH
     setPCost("");
     setPPrice("");
     setPCurrency("UZS");
@@ -108,9 +130,12 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen ${darkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"} pb-24`}>
+    <div
+      className={`min-h-screen ${
+        darkMode ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900"
+      } pb-24`}
+    >
       <div className="max-w-xl mx-auto p-4">
-
         {/* Sarlavha */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold flex items-center gap-2">
@@ -120,7 +145,11 @@ export default function App() {
             onClick={() => setDarkMode(!darkMode)}
             className="p-3 bg-gray-200 dark:bg-gray-700 rounded-full"
           >
-            {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            {darkMode ? (
+              <Sun className="w-5 h-5" />
+            ) : (
+              <Moon className="w-5 h-5" />
+            )}
           </button>
         </div>
 
@@ -134,7 +163,13 @@ export default function App() {
             <p className="text-xs opacity-70">Xarajat</p>
             <p className="text-lg font-bold">{format(expense)}</p>
           </div>
-          <div className={`p-4 rounded-2xl ${profit >= 0 ? "bg-blue-100 dark:bg-blue-900" : "bg-orange-100 dark:bg-orange-900"}`}>
+          <div
+            className={`p-4 rounded-2xl ${
+              profit >= 0
+                ? "bg-blue-100 dark:bg-blue-900"
+                : "bg-orange-100 dark:bg-orange-900"
+            }`}
+          >
             <p className="text-xs opacity-70">Foyda</p>
             <p className="text-lg font-bold">{format(profit)}</p>
           </div>
@@ -144,20 +179,30 @@ export default function App() {
         <div className="flex gap-2 mb-4">
           <button
             onClick={() => setShowUSD(false)}
-            className={`flex-1 py-2 rounded-lg font-medium ${!showUSD ? "bg-blue-600 text-white" : "bg-gray-200 dark:bg-gray-700"}`}
+            className={`flex-1 py-2 rounded-lg font-medium ${
+              !showUSD
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 dark:bg-gray-700"
+            }`}
           >
             so'm
           </button>
           <button
             onClick={() => setShowUSD(true)}
-            className={`flex-1 py-2 rounded-lg font-medium ${showUSD ? "bg-blue-600 text-white" : "bg-gray-200 dark:bg-gray-700"}`}
+            className={`flex-1 py-2 rounded-lg font-medium ${
+              showUSD
+                ? "bg-blue-600 text-white"
+                : "bg-gray-200 dark:bg-gray-700"
+            }`}
           >
             $
           </button>
           <input
             type="number"
             value={exchangeRate}
-            onChange={(e) => setExchangeRate(Math.max(1, Number(e.target.value) || 1))}
+            onChange={(e) =>
+              setExchangeRate(Math.max(1, Number(e.target.value) || 1))
+            }
             placeholder="Kurs"
             className="w-24 px-3 py-2 bg-white dark:bg-gray-800 border rounded-lg text-sm"
           />
@@ -169,7 +214,11 @@ export default function App() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`flex-1 py-3 text-center font-medium ${activeTab === tab ? "border-b-2 border-blue-600 text-blue-600 dark:text-blue-400" : "text-gray-500"}`}
+              className={`flex-1 py-3 text-center font-medium ${
+                activeTab === tab
+                  ? "border-b-2 border-blue-600 text-blue-600 dark:text-blue-400"
+                  : "text-gray-500"
+              }`}
             >
               {tab === "add" && "Qo'shish"}
               {tab === "sales" && "Sotuvlar"}
@@ -182,7 +231,10 @@ export default function App() {
         {activeTab === "add" && (
           <div className="space-y-5">
             {/* Sotuv qo'shish */}
-            <form onSubmit={addProduct} className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow">
+            <form
+              onSubmit={addProduct}
+              className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow"
+            >
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <Package className="w-5 h-5" /> Sotuv qo'shish
               </h3>
@@ -198,7 +250,7 @@ export default function App() {
                   type="number"
                   placeholder="Soni"
                   value={pQty}
-                  onChange={(e) => setPQty(e.target.value)}   // HECH QANDAY "|| 1"
+                  onChange={(e) => setPQty(e.target.value)} // HECH QANDAY "|| 1"
                   className="p-3 border rounded-lg"
                   min="1"
                 />
@@ -227,14 +279,21 @@ export default function App() {
                   <option>so'm</option>
                   <option>$</option>
                 </select>
-                <button type="submit" className="flex-1 bg-blue-600 text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2">
+                <button
+                  type="submit"
+                  className="flex-1 bg-blue-600 text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2"
+                >
                   <Plus className="w-5 h-5" /> Qo'shish
                 </button>
               </div>
             </form>
 
             {/* Xarajat qo'shish */}
-            <form onSubmit={addExpense} className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow">
+            {/* Xarajat qo'shish */}
+            <form
+              onSubmit={addExpense}
+              className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow"
+            >
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <Receipt className="w-5 h-5" /> Xarajat qo'shish
               </h3>
@@ -245,7 +304,7 @@ export default function App() {
                 className="w-full p-3 border rounded-lg mb-3"
                 required
               />
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 <input
                   type="number"
                   placeholder="Summa"
@@ -257,12 +316,16 @@ export default function App() {
                 <select
                   value={eCurrency}
                   onChange={(e) => setECurrency(e.target.value)}
-                  className="p-3 border rounded-lg"
+                  className="p-3 border rounded-lg min-w-20"
                 >
                   <option>so'm</option>
                   <option>$</option>
                 </select>
-                <button type="submit" className="bg-red-600 text-white p-3 rounded-lg">
+                <button
+                  type="submit"
+                  className="bg-red-600 text-white p-3 rounded-lg flex items-center justify-center"
+                  style={{ minWidth: "48px" }}
+                >
                   <Plus className="w-5 h-5" />
                 </button>
               </div>
@@ -274,20 +337,33 @@ export default function App() {
         {activeTab === "sales" && (
           <div className="space-y-3">
             {products.length === 0 ? (
-              <p className="text-center text-gray-500 py-10">Hozircha sotuv yo'q</p>
+              <p className="text-center text-gray-500 py-10">
+                Hozircha sotuv yo'q
+              </p>
             ) : (
               products.map((p) => (
-                <div key={p.id} className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow flex justify-between items-center">
+                <div
+                  key={p.id}
+                  className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow flex justify-between items-center"
+                >
                   <div>
                     <p className="font-bold">{p.name}</p>
                     <p className="text-sm opacity-70">
-                      {p.qty} × {p.sellPrice} {p.currency === "UZS" ? "so'm" : "$"}
+                      {p.qty} × {p.sellPrice}{" "}
+                      {p.currency === "UZS" ? "so'm" : "$"}
                     </p>
-                    <p className="text-xs opacity-50">{new Date(p.time).toLocaleDateString("uz-UZ")}</p>
+                    <p className="text-xs opacity-50">
+                      {new Date(p.time).toLocaleDateString("uz-UZ")}
+                    </p>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold">{format(toUZS(p.sellPrice, p.currency) * p.qty)}</p>
-                    <button onClick={() => remove(products, setProducts, p.id)} className="text-red-600 mt-1">
+                    <p className="font-bold">
+                      {format(toUZS(p.sellPrice, p.currency) * p.qty)}
+                    </p>
+                    <button
+                      onClick={() => remove(products, setProducts, p.id)}
+                      className="text-red-600 mt-1"
+                    >
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
@@ -301,18 +377,32 @@ export default function App() {
         {activeTab === "expenses" && (
           <div className="space-y-3">
             {expenses.length === 0 ? (
-              <p className="text-center text-gray-500 py-10">Hozircha xarajat yo'q</p>
+              <p className="text-center text-gray-500 py-10">
+                Hozircha xarajat yo'q
+              </p>
             ) : (
               expenses.map((e) => (
-                <div key={e.id} className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow flex justify-between items-center">
+                <div
+                  key={e.id}
+                  className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow flex justify-between items-center"
+                >
                   <div>
                     <p className="font-bold">{e.note}</p>
-                    <p className="text-sm opacity-70">{e.amount} {e.currency === "UZS" ? "so'm" : "$"}</p>
-                    <p className="text-xs opacity-50">{new Date(e.time).toLocaleDateString("uz-UZ")}</p>
+                    <p className="text-sm opacity-70">
+                      {e.amount} {e.currency === "UZS" ? "so'm" : "$"}
+                    </p>
+                    <p className="text-xs opacity-50">
+                      {new Date(e.time).toLocaleDateString("uz-UZ")}
+                    </p>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold">{format(toUZS(e.amount, e.currency))}</p>
-                    <button onClick={() => remove(expenses, setExpenses, e.id)} className="text-red-600 mt-1">
+                    <p className="font-bold">
+                      {format(toUZS(e.amount, e.currency))}
+                    </p>
+                    <button
+                      onClick={() => remove(expenses, setExpenses, e.id)}
+                      className="text-red-600 mt-1"
+                    >
                       <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
@@ -334,15 +424,30 @@ export default function App() {
       {/* Pastki navigatsiya */}
       <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t">
         <div className="flex justify-around py-2">
-          <button onClick={() => setActiveTab("add")} className={`p-3 ${activeTab === "add" ? "text-blue-600" : "text-gray-500"}`}>
+          <button
+            onClick={() => setActiveTab("add")}
+            className={`p-3 ${
+              activeTab === "add" ? "text-blue-600" : "text-gray-500"
+            }`}
+          >
             <Plus className="w-6 h-6" />
             <p className="text-xs">Qo'shish</p>
           </button>
-          <button onClick={() => setActiveTab("sales")} className={`p-3 ${activeTab === "sales" ? "text-blue-600" : "text-gray-500"}`}>
+          <button
+            onClick={() => setActiveTab("sales")}
+            className={`p-3 ${
+              activeTab === "sales" ? "text-blue-600" : "text-gray-500"
+            }`}
+          >
             <DollarSign className="w-6 h-6" />
             <p className="text-xs">Sotuv</p>
           </button>
-          <button onClick={() => setActiveTab("expenses")} className={`p-3 ${activeTab === "expenses" ? "text-blue-600" : "text-gray-500"}`}>
+          <button
+            onClick={() => setActiveTab("expenses")}
+            className={`p-3 ${
+              activeTab === "expenses" ? "text-blue-600" : "text-gray-500"
+            }`}
+          >
             <Receipt className="w-6 h-6" />
             <p className="text-xs">Xarajat</p>
           </button>
