@@ -195,7 +195,7 @@ export default function App() {
                   value={pQty}
                   onChange={(e) => setPQty(e.target.value || "1")}
                   className="p-3 border rounded-lg"
-                  min="1"
+                  
                 />
                 <input
                   type="number"
