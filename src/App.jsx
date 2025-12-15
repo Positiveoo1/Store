@@ -18,16 +18,14 @@ export default function App() {
   );
   const [activeTab, setActiveTab] = useState("add");
 
-  // Form fields
   const [pName, setPName] = useState("");
-  const [pQty, setPQty] = useState(""); // empty => treated as 1
-  const [pCost, setPCost] = useState(""); // buy price
-  const [pPrice, setPPrice] = useState(""); // sell price
-
+  const [pQty, setPQty] = useState(""); 
+  const [pCost, setPCost] = useState(""); 
+  const [pPrice, setPPrice] = useState(""); 
   const [eNote, setENote] = useState("");
   const [eAmount, setEAmount] = useState("");
 
-  // Persist lists
+  
   useEffect(() => localStorage.setItem("products", JSON.stringify(products)), [products]);
   useEffect(() => localStorage.setItem("expenses", JSON.stringify(expenses)), [expenses]);
 
@@ -36,29 +34,24 @@ export default function App() {
   }, [darkMode]);
 
   const toNum = (v) => Number(v) || 0;
-  const fmt = (v) => `${Math.round(v).toLocaleString()} so'm`;
+  const fmt = (v) => `${Math.round(v).toLocaleString()} UZS`;
 
-  // New calculations per your request:
-  // revenue = sum of sellPrice * qty
   const revenue = products.reduce(
     (s, p) => s + toNum(p.sellPrice) * (Number(p.qty) || 1),
     0
   );
-  // cost (total buy price) = sum of buyPrice * qty
   const totalCost = products.reduce(
     (s, p) => s + toNum(p.buyPrice) * (Number(p.qty) || 1),
     0
   );
-  // other expenses (entered manually)
   const otherExpenses = expenses.reduce((s, e) => s + toNum(e.amount), 0);
 
-  // profit = revenue - cost - otherExpenses
   const profit = revenue - totalCost - otherExpenses;
 
   const addProduct = (ev) => {
     ev.preventDefault();
     if (!pName.trim() || !pPrice || Number(pPrice) <= 0) {
-      alert("Mahsulot nomi va sotish narxini kiriting");
+      alert("Enter the product name and selling price");
       return;
     }
     const qty = Number(pQty) || 1;
@@ -80,7 +73,7 @@ export default function App() {
   const addExpense = (ev) => {
     ev.preventDefault();
     if (!eNote.trim() || !eAmount || Number(eAmount) <= 0) {
-      alert("Izoh va summasini kiriting");
+      alert("Enter the note and amount");
       return;
     }
     const newE = {
@@ -95,7 +88,7 @@ export default function App() {
   };
 
   const remove = (list, setList, id) => {
-    if (confirm("O'chirishni xohlaysizmi?")) {
+    if (confirm("Do you want to delete?")) {
       setList(list.filter((x) => x.id !== id));
     }
   };
@@ -106,7 +99,7 @@ export default function App() {
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold flex items-center gap-2">
-            <Package className="w-7 h-7 text-blue-600" /> Do'kon
+            <Package className="w-7 h-7 text-blue-600" /> Store
           </h1>
           <button onClick={() => setDarkMode(!darkMode)} className="p-3 bg-gray-200 dark:bg-gray-700 rounded-full">
             {darkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -116,19 +109,19 @@ export default function App() {
         {/* Key metrics: revenue, cost, profit */}
         <div className="grid grid-cols-3 gap-3 mb-6 text-center">
           <div className="bg-green-100 dark:bg-green-900 p-4 rounded-2xl">
-            <p className="text-xs opacity-70">Sotuvlar</p>
+            <p className="text-xs opacity-70">Sales</p>
             <p className="text-lg font-bold">{fmt(revenue)}</p>
-            <p className="text-xs opacity-60">(Sotishdan tushgan summa)</p>
+            <p className="text-xs opacity-60">(Revenue from sales)</p>
           </div>
 
           <div className="bg-yellow-100 dark:bg-yellow-900 p-4 rounded-2xl">
-            <p className="text-xs opacity-70">Olish narxi</p>
+            <p className="text-xs opacity-70">Cost</p>
             <p className="text-lg font-bold">{fmt(totalCost)}</p>
-            <p className="text-xs opacity-60">(Tovar uchun sarflangan)</p>
+            <p className="text-xs opacity-60">(Spent on inventory)</p>
           </div>
 
           <div className={`p-4 rounded-2xl ${profit >= 0 ? "bg-blue-100 dark:bg-blue-900" : "bg-orange-100 dark:bg-orange-900"}`}>
-            <p className="text-xs opacity-70">Foyda</p>
+            <p className="text-xs opacity-70">Profit</p>
             <p className="text-lg font-bold">{fmt(profit)}</p>
             <p className="text-xs opacity-60">({fmt(revenue)} − {fmt(totalCost)} − {fmt(otherExpenses)})</p>
           </div>
@@ -142,9 +135,9 @@ export default function App() {
               onClick={() => setActiveTab(tab)}
               className={`flex-1 py-3 text-center font-medium ${activeTab === tab ? "border-b-2 border-blue-600 text-blue-600 dark:text-blue-400" : "text-gray-500"}`}
             >
-              {tab === "add" && "Qo'shish"}
-              {tab === "sales" && "Sotuvlar"}
-              {tab === "expenses" && "Xarajatlar"}
+              {tab === "add" && "Add"}
+              {tab === "sales" && "Sales"}
+              {tab === "expenses" && "Expenses"}
             </button>
           ))}
         </div>
@@ -154,30 +147,30 @@ export default function App() {
           <div className="space-y-5">
             <form onSubmit={addProduct} className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                <Package className="w-5 h-5" /> Sotuv qo'shish
+                <Package className="w-5 h-5" /> Add sale
               </h3>
-              <input placeholder="Mahsulot nomi" value={pName} onChange={(e) => setPName(e.target.value)} className="w-full p-3 border rounded-lg mb-3" required />
+              <input placeholder="Product name" value={pName} onChange={(e) => setPName(e.target.value)} className="w-full p-3 border rounded-lg mb-3" required />
               <div className="grid grid-cols-3 gap-2 mb-3">
-                <input type="number" placeholder="Soni" value={pQty} onChange={(e) => setPQty(e.target.value)} className="p-3 border rounded-lg" min="1" />
-                <input type="number" placeholder="Olish narxi (so'm)" value={pCost} onChange={(e) => setPCost(e.target.value)} className="p-3 border rounded-lg" />
-                <input type="number" placeholder="Sotish narxi (so'm)" value={pPrice} onChange={(e) => setPPrice(e.target.value)} className="p-3 border rounded-lg" required />
+                <input type="number" placeholder="Quantity" value={pQty} onChange={(e) => setPQty(e.target.value)} className="p-3 border rounded-lg" min="1" />
+                <input type="number" placeholder="Buy price (UZS)" value={pCost} onChange={(e) => setPCost(e.target.value)} className="p-3 border rounded-lg" />
+                <input type="number" placeholder="Sell price (UZS)" value={pPrice} onChange={(e) => setPPrice(e.target.value)} className="p-3 border rounded-lg" required />
               </div>
               <div className="flex gap-2">
-                <div className="flex-1 p-3 border rounded-lg flex items-center justify-center">so'm</div>
+                <div className="flex-1 p-3 border rounded-lg flex items-center justify-center">UZS</div>
                 <button type="submit" className="flex-1 bg-blue-600 text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2">
-                  <Plus className="w-5 h-5" /> Qo'shish
+                  <Plus className="w-5 h-5" /> Add
                 </button>
               </div>
             </form>
 
             <form onSubmit={addExpense} className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                <Receipt className="w-5 h-5" /> Xarajat qo'shish
+                <Receipt className="w-5 h-5" /> Add expense
               </h3>
-              <input placeholder="Izoh (masalan, ijara)" value={eNote} onChange={(e) => setENote(e.target.value)} className="w-full p-3 border rounded-lg mb-3" required />
+              <input placeholder="Note (e.g., rent)" value={eNote} onChange={(e) => setENote(e.target.value)} className="w-full p-3 border rounded-lg mb-3" required />
               <div className="flex gap-2 items-center">
-                <input type="number" placeholder="Summa (so'm)" value={eAmount} onChange={(e) => setEAmount(e.target.value)} className="flex-1 p-3 border rounded-lg" required />
-                <div className="p-3 border rounded-lg min-w-20 flex items-center">so'm</div>
+                <input type="number" placeholder="Amount (UZS)" value={eAmount} onChange={(e) => setEAmount(e.target.value)} className="flex-1 p-3 border rounded-lg" required />
+                <div className="p-3 border rounded-lg min-w-20 flex items-center">UZS</div>
                 <button type="submit" className="bg-red-600 text-white p-3 rounded-lg flex items-center justify-center" style={{ minWidth: "48px" }}>
                   <Plus className="w-5 h-5" />
                 </button>
@@ -190,16 +183,16 @@ export default function App() {
         {activeTab === "sales" && (
           <div className="space-y-3">
             {products.length === 0 ? (
-              <p className="text-center text-gray-500 py-10">Hozircha sotuv yo'q</p>
+              <p className="text-center text-gray-500 py-10">No sales yet</p>
             ) : (
               products.map((p) => (
                 <div key={p.id} className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow flex justify-between items-center">
                   <div>
                     <p className="font-bold">{p.name}</p>
                     <p className="text-sm opacity-70">
-                      {p.qty} × {p.sellPrice} so'm (Olish: {p.buyPrice} so'm)
+                      {p.qty} × {p.sellPrice} UZS (Buy: {p.buyPrice} UZS)
                     </p>
-                    <p className="text-xs opacity-50">{new Date(p.time).toLocaleDateString("uz-UZ")}</p>
+                    <p className="text-xs opacity-50">{new Date(p.time).toLocaleDateString("en-US")}</p>
                   </div>
                   <div className="text-right">
                     <p className="font-bold">{fmt(toNum(p.sellPrice) * p.qty)}</p>
@@ -217,14 +210,14 @@ export default function App() {
         {activeTab === "expenses" && (
           <div className="space-y-3">
             {expenses.length === 0 ? (
-              <p className="text-center text-gray-500 py-10">Hozircha xarajat yo'q</p>
+              <p className="text-center text-gray-500 py-10">No expenses yet</p>
             ) : (
               expenses.map((e) => (
                 <div key={e.id} className="bg-white dark:bg-gray-800 p-4 rounded-2xl shadow flex justify-between items-center">
                   <div>
                     <p className="font-bold">{e.note}</p>
-                    <p className="text-sm opacity-70">{e.amount} so'm</p>
-                    <p className="text-xs opacity-50">{new Date(e.time).toLocaleDateString("uz-UZ")}</p>
+                    <p className="text-sm opacity-70">{e.amount} UZS</p>
+                    <p className="text-xs opacity-50">{new Date(e.time).toLocaleDateString("en-US")}</p>
                   </div>
                   <div className="text-right">
                     <p className="font-bold">{fmt(toNum(e.amount))}</p>
@@ -249,15 +242,15 @@ export default function App() {
         <div className="flex justify-around py-2">
           <button onClick={() => setActiveTab("add")} className={`p-3 ${activeTab === "add" ? "text-blue-600" : "text-gray-500"}`}>
             <Plus className="w-6 h-6" />
-            <p className="text-xs">Qo'shish</p>
+            <p className="text-xs">Add</p>
           </button>
           <button onClick={() => setActiveTab("sales")} className={`p-3 ${activeTab === "sales" ? "text-blue-600" : "text-gray-500"}`}>
             <DollarSign className="w-6 h-6" />
-            <p className="text-xs">Sotuv</p>
+            <p className="text-xs">Sales</p>
           </button>
           <button onClick={() => setActiveTab("expenses")} className={`p-3 ${activeTab === "expenses" ? "text-blue-600" : "text-gray-500"}`}>
             <Receipt className="w-6 h-6" />
-            <p className="text-xs">Xarajat</p>
+            <p className="text-xs">Expenses</p>
           </button>
         </div>
       </div>
