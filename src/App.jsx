@@ -106,7 +106,6 @@ export default function App() {
           </button>
         </div>
 
-        {/* Key metrics: revenue, cost, profit */}
         <div className="grid grid-cols-3 gap-3 mb-6 text-center">
           <div className="bg-green-100 dark:bg-green-900 p-4 rounded-2xl">
             <p className="text-xs opacity-70">Sales</p>
@@ -142,18 +141,17 @@ export default function App() {
           ))}
         </div>
 
-        {/* Add */}
         {activeTab === "add" && (
           <div className="space-y-5">
             <form onSubmit={addProduct} className="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <Package className="w-5 h-5" /> Add sale
               </h3>
-              <input placeholder="Product name" value={pName} onChange={(e) => setPName(e.target.value)} className="w-full p-3 border rounded-lg mb-3" required />
+              <input placeholder="Product name" value={pName} onChange={(e) => setPName(e.target.value)} className="w-full p-3 border rounded-lg mb-3 dark:bg-gray-700 dark:text-white dark:border-gray-600" required />
               <div className="grid grid-cols-3 gap-2 mb-3">
-                <input type="number" placeholder="Quantity" value={pQty} onChange={(e) => setPQty(e.target.value)} className="p-3 border rounded-lg" min="1" />
-                <input type="number" placeholder="Buy price (UZS)" value={pCost} onChange={(e) => setPCost(e.target.value)} className="p-3 border rounded-lg" />
-                <input type="number" placeholder="Sell price (UZS)" value={pPrice} onChange={(e) => setPPrice(e.target.value)} className="p-3 border rounded-lg" required />
+                <input type="number" placeholder="Quantity" value={pQty} onChange={(e) => setPQty(e.target.value)} className="p-3 border rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600" min="1" />
+                <input type="number" placeholder="Buy price (UZS)" value={pCost} onChange={(e) => setPCost(e.target.value)} className="p-3 border rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600" />
+                <input type="number" placeholder="Sell price (UZS)" value={pPrice} onChange={(e) => setPPrice(e.target.value)} className="p-3 border rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600" required />
               </div>
               <div className="flex gap-2">
                 <div className="flex-1 p-3 border rounded-lg flex items-center justify-center">UZS</div>
@@ -167,9 +165,9 @@ export default function App() {
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <Receipt className="w-5 h-5" /> Add expense
               </h3>
-              <input placeholder="Note (e.g., rent)" value={eNote} onChange={(e) => setENote(e.target.value)} className="w-full p-3 border rounded-lg mb-3" required />
+              <input placeholder="Note (e.g., rent)" value={eNote} onChange={(e) => setENote(e.target.value)} className="w-full p-3 border rounded-lg mb-3 dark:bg-gray-700 dark:text-white dark:border-gray-600" required />
               <div className="flex gap-2 items-center">
-                <input type="number" placeholder="Amount (UZS)" value={eAmount} onChange={(e) => setEAmount(e.target.value)} className="flex-1 p-3 border rounded-lg" required />
+                <input type="number" placeholder="Amount (UZS)" value={eAmount} onChange={(e) => setEAmount(e.target.value)} className="flex-1 p-3 border rounded-lg dark:bg-gray-700 dark:text-white dark:border-gray-600" required />
                 <div className="p-3 border rounded-lg min-w-20 flex items-center">UZS</div>
                 <button type="submit" className="bg-red-600 text-white p-3 rounded-lg flex items-center justify-center" style={{ minWidth: "48px" }}>
                   <Plus className="w-5 h-5" />
